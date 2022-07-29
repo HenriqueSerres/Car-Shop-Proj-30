@@ -29,7 +29,8 @@ class CarService implements IService<ICar> {
       throw parsed.error; 
     }
     await this.readOne(_id);
-    return this._car.update(_id, obj);
+    const result = await this._car.update(_id, obj);
+    return result;
   }
 
   public async read():Promise<ICar[]> {

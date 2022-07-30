@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import CarModel from '../../../models/Cars';
 import { Model } from 'mongoose';
 import {
+  allCarMock,
   carMock,
   carMockWithId,
   carMockUpDate,
@@ -13,9 +14,11 @@ describe('car Model', () => {
   const carModel = new CarModel();
 
 	before(() => {
+    sinon.stub(Model, 'find').resolves(allCarMock);
 		sinon.stub(Model, 'create').resolves(carMockWithId);
 		sinon.stub(Model, 'findOne').resolves(carMockWithId);
     sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockWithIdUpDate);
+    sinon.stub(Model, 'findByIdAndRemove').resolves(carMockWithId);
 	});
 
 	after(() => {
@@ -26,6 +29,13 @@ describe('car Model', () => {
 		it('successfully created', async () => {
 			const newCar = await carModel.create(carMock);
 			expect(newCar).to.be.deep.equal(carMockWithId);
+		});
+	});
+
+  describe('seraching all Cars', () => {
+		it('successfully search', async () => {
+			const allCars = await carModel.read();
+			expect(allCars).to.be.deep.equal(allCarMock);
 		});
 	});
 
@@ -56,6 +66,13 @@ describe('car Model', () => {
 			} catch (error: any) {
 				expect(error.message).to.be.eq('InvalidMongoId');
 			}
+		});
+	});
+
+  describe('erasing a Car', () => {
+		it('successfully erased', async () => {
+			const car = await carModel.delete('62cf1fc6498565d94eba52cd');
+			expect(car).to.be.deep.equal(carMockWithId);
 		});
 	});
 

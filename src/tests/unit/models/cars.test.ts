@@ -7,7 +7,7 @@ import {
   carMockWithId,
   carMockUpDate,
   carMockWithIdUpDate
-} from '../../mocks/carMock';
+} from '../../unit/mocks/carMock';
 
 describe('car Model', () => {
   const carModel = new CarModel();

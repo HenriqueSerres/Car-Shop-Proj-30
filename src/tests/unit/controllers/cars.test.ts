@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { NextFunction, Request, Response } from 'express';
-import { carMock, carMockWithId } from '../../mocks/carMock';
+import { carMock, carMockWithId } from '../../unit/mocks/carMock';
 import CarController from '../../../controllers/Cars';
 import CarService from '../../../services/Cars';
 import CarModel from '../../../models/Cars';

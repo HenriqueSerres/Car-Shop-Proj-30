@@ -4,7 +4,7 @@ import { ZodError } from 'zod';
 import { ErrorTypes } from '../../../errors/catalog';
 import CarModel from '../../../models/Cars';
 import CarService from '../../../services/Cars';
-import { carMock, carMockWithId, carMockUpDate, carMockWithIdUpDate } from '../../unit/mocks/carMock';
+import { carMock, carMockWithId, carMockUpDate, carMockWithIdUpDate, allCarMock } from '../../unit/mocks/carMock';
 
 describe('Car Service', () => {
 	const carModel = new CarModel();
@@ -12,6 +12,7 @@ describe('Car Service', () => {
 
 	before(() => {
 		sinon.stub(carModel, 'create').resolves(carMockWithId);
+    sinon.stub(carModel, 'read').resolves(allCarMock);
     sinon.stub(carModel, 'update')
       .onCall(0).resolves(carMockWithIdUpDate)
 			.onCall(1).resolves(null);
@@ -34,6 +35,22 @@ describe('Car Service', () => {
 			const carCreated = await carService.create(carMock);
 
 			expect(carCreated).to.be.deep.equal(carMockWithId);
+		});
+
+		it('Failure', async () => {
+			try {
+				await carService.create({} as any);
+			} catch (error) {
+				expect(error).to.be.instanceOf(ZodError);
+			}
+		});
+	});
+
+  describe('Read all Cars', () => {
+		it('Success', async () => {
+			const allCars = await carService.read();
+
+			expect(allCars).to.be.deep.equal(allCarMock);
 		});
 
 		it('Failure', async () => {
